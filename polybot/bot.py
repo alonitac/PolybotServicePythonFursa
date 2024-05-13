@@ -122,5 +122,5 @@ class ImageProcessingBot(Bot):
         except Exception as e:
             logger.error(f'Error: {e}')
             self.send_text(msg['chat']['id'], 'something went wrong...\n'
-                                              'please try again')
-            self.send_text(msg['chat']['id'], usage_msg)
+                                              'please try again\n\n'
+                                              '{usage_msg}')

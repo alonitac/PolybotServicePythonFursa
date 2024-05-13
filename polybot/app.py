@@ -17,8 +17,7 @@ def index():
 @app.route(f'/{TELEGRAM_TOKEN}/', methods=['POST'])
 def webhook():
     req = request.get_json()
-    bot.handle_message(req['message'] if 'message' in req else req[
-        'edited_message'])
+    bot.handle_message(req['message'])
     return 'Ok'
 
 

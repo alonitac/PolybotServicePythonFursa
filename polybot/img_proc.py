@@ -1,3 +1,4 @@
+import random
 from pathlib import Path
 from matplotlib.image import imread, imsave
 
@@ -51,17 +52,58 @@ class Img:
             self.data[i] = res
 
     def rotate(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        new_arr = []
+        for c in range(len(self.data[0])):
+            new_col = []
+            # make new row from the columns
+            for r in range(len(self.data) - 1, -1, -1):
+                new_col.append(self.data[r][c])
+            new_arr.append(new_col)
+        self.data = new_arr
 
     def salt_n_pepper(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for r in range(len(self.data)):
+            for c in range(len(self.data[r])):
+                # take a random floating number between 0 and 1 (inclusive)
+                choice = random.randint(0, 100) / 100
+                # give the maximum intensity to the current pixel
+                if choice < 0.2:
+                    self.data[r][c] = 255
+                # give the minimum intensity to the current pixel
+                elif choice > 0.8:
+                    self.data[r][c] = 0
 
     def concat(self, other_img, direction='horizontal'):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        # checking if heights are equal
+        if len(self.data) != len(other_img.data):
+            raise RuntimeError("ERROR: height of given image not as the current image")
+
+        # checking if widths are equal
+        # assuming the image is rectangular or square shape
+        if len(self.data[0]) != len(other_img.data[0]):
+            raise RuntimeError("ERROR: the width of the given image not as the current image")
+        # for r in range(len(self.data)):
+        #     if len(self.data[r]) != len(other_img.data):
+        #         pass
+
+        # if the direction is horizontal then we want to connect each row
+        # for the other image to each row in the current image's
+        # corresponding row
+        if direction == 'horizontal':
+            for i, row in enumerate(self.data):
+                row += other_img.data[i]
+        # if the direction is vertical then we want to connect all the
+        # other image at the end of the current image
+        elif direction == 'vertical':
+            for row in other_img.data:
+                self.data.append(row)
 
     def segment(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for r in range(len(self.data)):
+            for c in range(len(self.data[r])):
+                # give 255 to pixels greater than 100, 0 otherwise
+                if self.data[r][c] > 100:
+                    self.data[r][c] = 255
+                else:
+                    self.data[r][c] = 0
+

@@ -75,4 +75,52 @@ class QuoteBot(Bot):
 
 
 class ImageProcessingBot(Bot):
-    pass
+    def handle_message(self, msg):
+        is_photo = self.is_current_msg_photo(msg)
+        choices_msg = ('- Blur\n'
+                       '- Contour\n'
+                       '- Rotate [number of rotations]\n'
+                       '- Salt and pepper\n'
+                       '- Segment\n'
+                       '- Concat')
+        usage_msg = ('Please send a photo, with a caption of the '
+                     'filter you want to apply on it.\n'
+                     f'{choices_msg}')
+        try:
+            if is_photo:
+                self.send_text(msg['chat']['id'], 'processing the image...')
+                img_path = self.download_user_photo(msg)
+                img = Img(img_path)
+                process_option = msg['caption'].strip().split(' ')
+                option = process_option[0].lower().strip()
+                if option == 'blur':
+                    img.blur()
+                elif option == 'contour':
+                    img.contour()
+                elif option == 'rotate':
+                    num_of_rotations = int(process_option[1])
+                    for _ in range(num_of_rotations):
+                        img.rotate()
+                elif option == 'salt and pepper':
+                    img.salt_n_pepper()
+                elif option == 'segment':
+                    img.segment()
+                elif option == 'concat':
+                    img2_path = self.download_user_photo(msg)
+                    img2 = Img(img2_path)
+                    img.concat(img2)
+                else:
+                    invalid_msg = ('Invalid option\n'
+                                   'You can just choose:\n'
+                                   f'{choices_msg}')
+                    self.send_text(msg['chat']['id'], invalid_msg)
+                    return
+                new_img_path = img.save_img()
+                self.send_photo(msg['chat']['id'], new_img_path)
+            else:
+                self.send_text(msg['chat']['id'], usage_msg)
+        except Exception as e:
+            logger.error(f'Error: {e}')
+            self.send_text(msg['chat']['id'], 'something went wrong...\n'
+                                              'please try again')
+            self.send_text(msg['chat']['id'], usage_msg)

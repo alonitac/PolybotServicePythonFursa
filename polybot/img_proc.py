@@ -1,3 +1,4 @@
+import random
 from pathlib import Path
 from matplotlib.image import imread, imsave
 
@@ -51,17 +52,49 @@ class Img:
             self.data[i] = res
 
     def rotate(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        height = len(self.data)
+        width = len(self.data[0])
+
+        # Calculate center of the image
+        center_x = width // 2
+        center_y = height // 2
+
+        # Create a new array to hold the rotated image
+        rotated_data = [[0] * height for _ in range(width)]
+
+        # Iterate over each pixel in the original image
+        for y in range(height):
+            for x in range(width):
+                # Calculate new position after rotation
+                new_x = center_x + (y - center_y)
+                new_y = center_y - (x - center_x)
+
+                # Assign pixel value from original image to new position in rotated image
+                rotated_data[new_y][new_x] = self.data[y][x]
+
+        # Update self.data with the rotated image
+        self.data = rotated_data
 
     def salt_n_pepper(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for i in range(len(self.data)):
+            for j in range(len(self.data[0])):
+                rand = random.random()
+                if rand < 0.2:
+                    self.data[i][j] = 255  # Salt
+                elif rand > 0.8:
+                    self.data[i][j] = 0  # Pepper
 
     def concat(self, other_img, direction='horizontal'):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        if len(self.data) != len(other_img.data):
+            raise RuntimeError("Images have different heights and cannot be concatenated horizontally.")
 
+        self.data = [self_row + other_row for self_row, other_row in zip(self.data, other_img.data)]
+
+        
     def segment(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for i in range(len(self.data)):
+            for j in range(len(self.data[0])):
+                if self.data[i][j] > 100:
+                    self.data[i][j] = 255  # White
+                else:
+                    self.data[i][j] = 0  # Black

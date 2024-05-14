@@ -77,7 +77,7 @@ class QuoteBot(Bot):
 class ImageProcessingBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
-        if msg["text"] == '/start':
+        if "text" in msg == '/start':
             self.send_text(msg['chat']['id'],
                            'Hello! I am your bot. How can I assist you today?')
         else:

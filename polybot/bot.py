@@ -20,6 +20,8 @@ class Bot:
         # set the webhook URL
         self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
 
+        self.prev_path = ""
+
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
     def send_text(self, chat_id, text):
@@ -78,39 +80,66 @@ class ImageProcessingBot(Bot):
 
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
-        # option to filter the image
-        option_list = [
-            'blur', 'contour', 'rotate',
-            'salt_n_pepper', 'concat', 'segment'
-        ]
+
         try:
-            # check if msg is image
             if self.is_current_msg_photo(msg):
-                path = self.download_user_photo(msg)
-                image = Img(path)
-                caption = msg["caption"].lower()
-                index = option_list.index(caption)
-                # option to choose
-                match index:
-                    case 0:
-                        image.blur()
-                    case 1:
-                        image.contour()
-                    case 2:
-                        image.rotate()
-                    case 3:
-                        image.salt_n_pepper()
-                    case 4:
-                        image_2 = Img(path)
-                        image.concat(image_2)
-                    case 5:
-                        image.segment()
-                    case _:
-                        raise Exception("Sorry, option are invalid")
-                new_path = image.save_img()
-                self.send_photo(msg['chat']['id'], new_path)
+                self.handle_message_photo(msg)
             else:
-                self.send_text_with_quote(msg['chat']['id'], "msg are not photo please try agin", quoted_msg_id=msg["message_id"])
+                self.handle_message_text(msg)
         except Exception as e:
             print("error accord", e)
             self.send_text_with_quote(msg['chat']['id'], "error please try agin", quoted_msg_id=msg["message_id"])
+
+    def handle_message_text(self,msg):
+        option_list = [
+            'hi', 'hello', 'whats up',
+            'how are you', 'help'
+        ]
+        text = msg["text"]
+        index = option_list.index(text)
+        if 0 <= index <= 4:
+            self.send_text(msg['chat']['id'], "Hi How can I help you")
+        else:
+            self.send_text_with_quote(msg['chat']['id'], "error please try agin",
+                                      quoted_msg_id=msg["message_id"])
+
+    def handle_message_photo(self, msg):
+        option_list = [
+            'blur', 'contour', 'rotate',
+            'salt and pepper', 'concat', 'segment'
+        ]
+        if self.is_current_msg_photo(msg):
+            path = self.download_user_photo(msg)
+            image = Img(path)
+            if self.prev_path == "":
+                caption = msg["caption"].lower()
+            else:
+                caption = "concat"
+            index = option_list.index(caption)
+            # option to choose
+            match index:
+                case 0:
+                    image.blur()
+                case 1:
+                    image.contour()
+                case 2:
+                    image.rotate()
+                case 3:
+                    image.salt_n_pepper()
+                case 4:
+                    if self.prev_path == "":
+                        self.prev_path = path
+                        return
+                    else:
+                        image_2 = Img(self.prev_path)
+                        self.prev_path = ""
+                        image.concat(image_2)
+                case 5:
+                    image.segment()
+                case _:
+                    raise Exception("Sorry, option are invalid")
+            new_path = image.save_img()
+            self.send_photo(msg['chat']['id'], new_path)
+        else:
+            self.send_text_with_quote(msg['chat']['id'], "msg are not photo please try agin",
+                                      quoted_msg_id=msg["message_id"])

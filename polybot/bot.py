@@ -95,7 +95,7 @@ class ImageProcessingBot(Bot):
             'hi', 'hello', 'whats up',
             'how are you', 'help'
         ]
-        text = msg["text"]
+        text = msg["text"].lower()
         index = option_list.index(text)
         if 0 <= index <= 4:
             self.send_text(msg['chat']['id'], "Hi How can I help you")

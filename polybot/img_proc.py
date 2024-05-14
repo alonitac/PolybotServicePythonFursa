@@ -33,7 +33,6 @@ class Img:
             print('save image failed')
 
     def blur(self, blur_level=16):
-
         height = len(self.data)
         width = len(self.data[0])
         filter_sum = blur_level ** 2
@@ -58,28 +57,36 @@ class Img:
             self.data[i] = res
 
     def rotate(self):
-        N = len(self.data[0])
-        for i in range(N // 2):
-            for j in range(i, N - i - 1):
-                temp = self.data[i][j]
-                self.data[i][j] = self.data[N - 1 - j][i]
-                self.data[N - 1 - j][i] = self.data[N - 1 - i][N - 1 - j]
-                self.data[N - 1 - i][N - 1 - j] = self.data[j][N - 1 - i]
-                self.data[j][N - 1 - i] = temp
+        num_rows = len(self.data)
+        num_cols = len(self.data[0])
+
+        # Create a new matrix with dimensions swapped
+        rotated_matrix = [[0] * num_rows for _ in range(num_cols)]
+
+        # Iterate through the original matrix and place each element in the appropriate position in the rotated matrix
+        for i in range(num_rows):
+            for j in range(num_cols):
+                rotated_matrix[j][num_rows - 1 - i] = self.data[i][j]
+        # save the changes in the image data
+        self.data = rotated_matrix
 
     def salt_n_pepper(self):
-        N= len(self.data)
-        for i in range (N):
-            for j in range (len(self.data[0])):
+        N = len(self.data)
+        for i in range(N):
+            for j in range(len(self.data[0])):
+                # pick random number from 0-1
                 random_float = random.random()
+                # probability , 0.2 to get 255, 0.2 to get 0 ,and 0.6 to stay the same
                 if random_float < 0.2:
                     self.data[i][j] = 255
                 if random_float > 0.8:
                     self.data[i][j] = 0
 
     def concat(self, other_img, direction='horizontal'):
+        # check if two images are compatible
         if len(self.data[0]) != len(other_img.data[0]) or len(self.data) != len(other_img.data):
             raise RuntimeError()
+
         for i in range(len(other_img.data)):
             for j in range(len(other_img.data[i])):
                 self.data[i].append(other_img.data[i][j])

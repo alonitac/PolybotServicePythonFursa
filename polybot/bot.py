@@ -3,7 +3,7 @@ from loguru import logger
 import os
 import time
 from telebot.types import InputFile
-from polybot.img_proc import Img
+from img_proc import Img
 
 
 class Bot:
@@ -75,4 +75,42 @@ class QuoteBot(Bot):
 
 
 class ImageProcessingBot(Bot):
-    pass
+
+    def handle_message(self, msg):
+        logger.info(f'Incoming message: {msg}')
+        # option to filter the image
+        option_list = [
+            'blur', 'contour', 'rotate',
+            'salt_n_pepper', 'concat', 'segment'
+        ]
+        try:
+            # check if msg is image
+            if self.is_current_msg_photo(msg):
+                path = self.download_user_photo(msg)
+                image = Img(path)
+                caption = msg["caption"].lower()
+                index = option_list.index(caption)
+                # option to choose
+                match index:
+                    case 0:
+                        image.blur()
+                    case 1:
+                        image.contour()
+                    case 2:
+                        image.rotate()
+                    case 3:
+                        image.salt_n_pepper()
+                    case 4:
+                        image_2 = Img(path)
+                        image.concat(image_2)
+                    case 5:
+                        image.segment()
+                    case _:
+                        raise Exception("Sorry, option are invalid")
+                new_path = image.save_img()
+                self.send_photo(msg['chat']['id'], new_path)
+            else:
+                self.send_text_with_quote(msg['chat']['id'], "msg are not photo please try agin", quoted_msg_id=msg["message_id"])
+        except Exception as e:
+            print("error accord", e)
+            self.send_text_with_quote(msg['chat']['id'], "error please try agin", quoted_msg_id=msg["message_id"])

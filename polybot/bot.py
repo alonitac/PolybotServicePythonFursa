@@ -77,20 +77,21 @@ class QuoteBot(Bot):
 class ImageProcessingBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
-        if "text" in msg == '/start':
+        choices_msg = ('- Blur\n'
+                        '- Contour\n'
+                        '- Rotate [number of rotations]\n'
+                        '- Salt and pepper\n'
+                        '- Segment\n'
+                        '- Concat')
+        usage_msg = ('Please send a photo, with a caption of the '
+                        'filter you want to apply on it.\n'
+                        f'{choices_msg}')
+        if "text" in msg and msg["text"] == '/start':
             self.send_text(msg['chat']['id'],
                            'Hello! I am your bot. How can I assist you today?')
+            self.send_text(msg['chat']['id'], usage_msg)
         else:
             is_photo = self.is_current_msg_photo(msg)
-            choices_msg = ('- Blur\n'
-                           '- Contour\n'
-                           '- Rotate [number of rotations]\n'
-                           '- Salt and pepper\n'
-                           '- Segment\n'
-                           '- Concat')
-            usage_msg = ('Please send a photo, with a caption of the '
-                         'filter you want to apply on it.\n'
-                         f'{choices_msg}')
             try:
                 if is_photo:
                     self.send_text(msg['chat']['id'], 'processing the image...')

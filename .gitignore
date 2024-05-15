@@ -1,3 +1,8 @@
+.vscode/
+polybot/photos
+polybot/test/
+photos
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -3,7 +3,7 @@ from loguru import logger
 import os
 import time
 from telebot.types import InputFile
-from img_proc import Img
+from polybot.img_proc import Img
 
 
 class Bot:
@@ -99,15 +99,17 @@ class ImageProcessingBot(Bot):
             'how are you', 'start'
         ]
         text = msg["text"].lower()
-        index = option_list.index(text)
-        if 0 <= index <= 4:
-            self.send_text(msg['chat']['id'], "Hi How can I help you , you can use help for description")
+
         if text == "help":
-            self.send_text(msg['chat']['id'], "iam bot that can filter images , send me image with caption option \n "
+            self.send_text(msg['chat']['id'], "iam bot that can filter images, send me image with caption option:\n"
                                               "blur , rotate, salt and pepper, segment, contour")
         else:
-            self.send_text_with_quote(msg['chat']['id'], "error please try agin",
-                                      quoted_msg_id=msg["message_id"])
+            index = option_list.index(text)
+            if 0 <= index <= 4:
+                self.send_text(msg['chat']['id'], "Hi How can I help you , you can use help for description")
+            else:
+                self.send_text_with_quote(msg['chat']['id'], "sorry didn't understand ,yuo can use help for menu option",
+                                          quoted_msg_id=msg["message_id"])
 
     """function to handle message with photos"""
 

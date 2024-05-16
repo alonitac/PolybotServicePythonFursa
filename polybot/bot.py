@@ -3,7 +3,7 @@ from loguru import logger
 import os
 import time
 from telebot.types import InputFile
-from polybot.img_proc import Img
+from img_proc import Img
 
 
 class Bot:
@@ -25,10 +25,11 @@ class Bot:
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
     def send_text(self, chat_id, text):
-        self.telegram_bot_client.send_message(chat_id, text,timeout=5)
+        # added timeout 5 sec
+        self.telegram_bot_client.send_message(chat_id, text, timeout=5)
 
     def send_text_with_quote(self, chat_id, text, quoted_msg_id):
-        self.telegram_bot_client.send_message(chat_id, text, reply_to_message_id=quoted_msg_id, timeout= 5)
+        self.telegram_bot_client.send_message(chat_id, text, reply_to_message_id=quoted_msg_id, timeout=5)
 
     def is_current_msg_photo(self, msg):
         return 'photo' in msg
@@ -56,7 +57,7 @@ class Bot:
     def send_photo(self, chat_id, img_path):
         if not os.path.exists(img_path):
             raise RuntimeError("Image path doesn't exist")
-
+        # added timeout 5 sec
         self.telegram_bot_client.send_photo(
             chat_id,
             InputFile(img_path),
@@ -91,18 +92,24 @@ class ImageProcessingBot(Bot):
             print("error accord", e)
             self.send_text_with_quote(msg['chat']['id'], "error please try agin", quoted_msg_id=msg["message_id"])
 
-    def handle_message_text(self,msg):
+    #function to handle message with texts
+    def handle_message_text(self, msg):
         option_list = [
             'hi', 'hello', 'whats up',
-            'how are you', 'help'
+            'how are you', 'start'
         ]
         text = msg["text"].lower()
         index = option_list.index(text)
         if 0 <= index <= 4:
-            self.send_text(msg['chat']['id'], "Hi How can I help you")
+            self.send_text(msg['chat']['id'], "Hi How can I help you , you can use help for description")
+        if text == "help":
+            self.send_text(msg['chat']['id'], "iam bot that can filter images , send me image with caption option \n "
+                                              "blur , rotate, salt and pepper, segment, contour")
         else:
             self.send_text_with_quote(msg['chat']['id'], "error please try agin",
                                       quoted_msg_id=msg["message_id"])
+
+    """function to handle message with photos"""
 
     def handle_message_photo(self, msg):
         option_list = [

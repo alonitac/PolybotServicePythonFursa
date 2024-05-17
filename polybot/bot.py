@@ -76,6 +76,7 @@ class QuoteBot(Bot):
 
 class ImageProcessingBot(Bot):
     def handle_message(self, msg):
+
         try:
             logger.info(f'Incoming message: {msg}')
 

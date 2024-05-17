@@ -116,37 +116,65 @@ class ImageProcessingBot(Bot):
             logger.error(f"Error: {e}")
             self.send_text(msg['chat']['id'], "Error: Please try again later.")
 
+    class ImageProcessingBot(Bot):
+        def handle_message(self, msg):
+            try:
+                logger.info(f'Incoming message: {msg}')
+                options_msg = ('- Blur\n'
+                               '- Contour\n'
+                               '- Rotate [number of rotations]\n'
+                               '- Salt and pepper\n'
+                               '- Segment\n'
+                               '- Concat')
+                usage_msg = ('Welcome to the Image Processing Bot!\n'
+                             'Please send a photo along with a caption specifying the filter you want to apply.\n'
+                             'Supported filters:\n'
+                             f'{options_msg}')
 
+                if "text" in msg and msg["text"].strip().lower() == '/start':
+                    self.send_text(msg['chat']['id'],
+                                   'Hello! I am your Image Processing Bot. How can I assist you today?')
+                    self.send_text(msg['chat']['id'], usage_msg)
+                    return
 
-    def process_image(self, photo_path, caption, msg):
-        """Process the image according to the provided caption."""
-        img = Img(photo_path)
+                is_photo = self.is_current_msg_photo(msg)
+                if is_photo:
+                    self.send_text(msg['chat']['id'], 'Processing the image...')
+                    photo_path = self.download_user_photo(msg)
+                    caption = msg.get('caption', '').lower()
+                    processed_path = self.process_image(photo_path, caption, msg)
+                    self.send_photo(msg['chat']['id'], processed_path)
+                else:
+                    self.send_text(msg['chat']['id'], "Please send a photo.")
+            except Exception as e:
+                logger.error(f"Error: {e}")
+                self.send_text(msg['chat']['id'], "Error: Please try again later.")
 
-        if caption == 'blur':
-            img.blur()
-        elif caption == 'contour':
-            img.contour()
-        elif caption == 'rotate':
-            img.rotate()
-        elif caption == 'segment':
-            img.segment()
-        elif caption == 'salt and pepper':
-            img.salt_n_pepper()
-        elif caption == 'concat':
-            # Check if the message contains information about the second image
-            second_photo_path = msg.get('second_photo_path')
-            if second_photo_path:
-                second_img = Img(second_photo_path)
-                img.concat(second_img)
+        def process_image(self, photo_path, caption, msg):
+            img = Img(photo_path)
+            if caption == 'blur':
+                img.blur()
+            elif caption == 'contour':
+                img.contour()
+            elif caption == 'rotate':
+                img.rotate()
+            elif caption == 'segment':
+                img.segment()
+            elif caption == 'salt and pepper':
+                img.salt_n_pepper()
+            elif caption == 'concat':
+                second_photo_path = msg.get('second_photo_path')
+                if second_photo_path:
+                    second_img = Img(second_photo_path)
+                    img.concat(second_img)
+                else:
+                    raise ValueError("For 'Concat' caption, information about the second image is required.")
             else:
-                raise ValueError("For 'Concat' caption, information about the second image is required.")
-        else:
-            raise ValueError(
-                f"Invalid caption: {caption}. Supported captions are: ['blur', 'contour', 'rotate', 'segment', "
-                f"'salt and pepper', 'concat']"
-            )
+                raise ValueError(
+                    f"Invalid caption: {caption}. Supported captions are: ['blur', 'contour', 'rotate', 'segment', "
+                    f"'salt and pepper', 'concat']"
+                )
+            processed_path = img.save_img()
+            return processed_path
 
-        # Save the processed image
-        processed_path = img.save_img()
-        return processed_path
 

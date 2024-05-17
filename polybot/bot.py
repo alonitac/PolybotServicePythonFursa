@@ -75,4 +75,65 @@ class QuoteBot(Bot):
 
 
 class ImageProcessingBot(Bot):
-    pass
+    def handle_message(self, msg):
+        try:
+            logger.info(f'Incoming message: {msg}')
+
+            if 'text' in msg:
+                if msg['text'].lower() in ['start', 'hello', 'hi']:
+                    self.send_text(
+                        msg['chat']['id'],
+                        "Hi there! I'm your Image Processing Bot. Send me a photo with a caption like 'Blur', "
+                        "'Rotate', 'Concat', etc., and I'll apply the filter for you!"
+                    )
+                return
+
+            # Check if the received message contains a photo
+            if self.is_current_msg_photo(msg):
+                # Download the photo sent by the user
+                photo_path = self.download_user_photo(msg)
+                caption = msg.get('caption', '').lower()
+
+                # Process the photo according to the caption
+                processed_path = self.process_image(photo_path, caption, msg)
+                # Send the processed image back to the user
+                self.send_photo(msg['chat']['id'], processed_path)
+            else:
+                # Inform user to send a photo.
+                self.send_text(msg['chat']['id'], "Please send a photo.")
+        except Exception as e:
+            logger.error(f"Error: {e}")
+            self.send_text(msg['chat']['id'], "Error : please try again")
+
+    def process_image(self, photo_path, caption, msg):
+        """Process the image according to the provided caption."""
+        img = Img(photo_path)
+
+        if caption == 'blur':
+            img.blur()
+        elif caption == 'contour':
+            img.contour()
+        elif caption == 'rotate':
+            img.rotate()
+        elif caption == 'segment':
+            img.segment()
+        elif caption == 'salt and pepper':
+            img.salt_n_pepper()
+        elif caption == 'concat':
+            # Check if the message contains information about the second image
+            second_photo_path = msg.get('second_photo_path')
+            if second_photo_path:
+                second_img = Img(second_photo_path)
+                img.concat(second_img)
+            else:
+                raise ValueError("For 'Concat' caption, information about the second image is required.")
+        else:
+            raise ValueError(
+                f"Invalid caption: {caption}. Supported captions are: ['blur', 'contour', 'rotate', 'segment', "
+                f"'salt and pepper', 'concat']"
+            )
+
+        # Save the processed image
+        processed_path = img.save_img()
+        return processed_path
+

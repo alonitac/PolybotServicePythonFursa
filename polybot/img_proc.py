@@ -55,25 +55,16 @@ class Img:
         height = len(self.data)
         width = len(self.data[0])
 
-        # Calculate center of the image
-        center_x = width // 2
-        center_y = height // 2
+        # Transpose the image (swap rows with columns)
+        transposed_data = [[self.data[j][i] for j in range(height)] for i in range(width)]
 
-        # Create a new array to hold the rotated image
-        rotated_data = [[0] * height for _ in range(width)]
+        # Reverse the rows to complete the rotation
+        for i in range(width):
+            transposed_data[i] = transposed_data[i][::-1]
 
-        # Iterate over each pixel in the original image
-        for y in range(height):
-            for x in range(width):
-                # Calculate new position after rotation
-                new_x = center_x + (y - center_y)
-                new_y = center_y - (x - center_x)
+        # Update the image data with the rotated data
+        self.data = transposed_data
 
-                # Assign pixel value from original image to new position in rotated image
-                rotated_data[new_y][new_x] = self.data[y][x]
-
-        # Update self.data with the rotated image
-        self.data = rotated_data
 
     def salt_n_pepper(self):
         for i in range(len(self.data)):
@@ -85,12 +76,18 @@ class Img:
                     self.data[i][j] = 0  # Pepper
 
     def concat(self, other_img, direction='horizontal'):
-        if len(self.data) != len(other_img.data):
-            raise RuntimeError("Images have different heights and cannot be concatenated horizontally.")
+        if len(self.data[0]) != len(other_img.data[0]):
+            raise RuntimeError("Images have different widths and cannot be concatenated vertically.")
 
-        self.data = [self_row + other_row for self_row, other_row in zip(self.data, other_img.data)]
+        if direction == 'horizontal':
+            if len(self.data) != len(other_img.data):
+                raise RuntimeError("Images have different heights and cannot be concatenated horizontally.")
+            self.data = [self_row + other_row for self_row, other_row in zip(self.data, other_img.data)]
+        elif direction == 'vertical':
+            self.data += other_img.data
+        else:
+            raise ValueError("Invalid direction. Direction must be 'horizontal' or 'vertical'.")
 
-        
     def segment(self):
         for i in range(len(self.data)):
             for j in range(len(self.data[0])):

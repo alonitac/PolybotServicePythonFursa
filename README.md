@@ -348,3 +348,73 @@ Time to submit your solution for testing.
 [python_project_webhook2]: https://alonitac.github.io/DevOpsTheHardWay/img/python_project_webhook2.png
 
 
+
+----------------------------
+# PolybotServicePythonFursa
+
+## Overview
+
+PolybotServicePythonFursa is a Python-based service designed to process images via a Telegram bot. Users can send images to the bot, which then applies various filters and returns the processed images.
+
+## Features
+
+- **Image Filters**: Apply filters such as Blur, Contour, Rotate, Segment, Salt and Pepper, and Concat.
+- **Telegram Bot Integration**: Interact with the service via a Telegram bot.
+- **Flexible and Extensible**: Easily add new filters and extend bot functionality.
+
+## Installation
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/Mohmmad-amer/PolybotServicePythonFursa.git
+   cd PolybotServicePythonFursa
+Create a Virtual Environment:
+
+bash
+Copy code
+python3 -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+Install Dependencies:
+
+bash
+Copy code
+pip install -r requirements.txt
+Usage
+Running the Bot
+Set Up Environment Variables:
+
+TELEGRAM_TOKEN: Your Telegram bot token.
+TELEGRAM_APP_URL: The public URL for your bot (use Ngrok for local development).
+bash
+Copy code
+export TELEGRAM_TOKEN='your-telegram-token'
+export TELEGRAM_APP_URL='your-ngrok-url'
+Run the Bot:
+
+bash
+Copy code
+python polybot/app.py
+Applying Filters
+Blur: Blurs the image.
+Contour: Adds a contour effect to the image.
+Rotate: Rotates the image.
+Segment: Segments the image into regions.
+Salt and Pepper: Adds noise to the image.
+Concat: Concatenates two images side by side.
+Testing
+To run the tests, execute:
+
+bash
+Copy code
+python -m unittest discover -s polybot/test
+Extending Functionality
+You can extend the bot by adding new filters or enhancing existing ones. Implement additional methods in the Img class and update the ImageProcessingBot class to support these new filters.
+
+License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+
+Contact
+For any questions or suggestions, feel free to open an issue or contact the repository owner.

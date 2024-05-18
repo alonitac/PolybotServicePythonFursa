@@ -75,4 +75,70 @@ class QuoteBot(Bot):
 
 
 class ImageProcessingBot(Bot):
-    pass
+    def handle_message(self, msg):
+        logger.info(f'Incoming message: {msg}')
+        name = msg['chat']['first_name']
+        options = ("Please send a photo, with a caption of the filter you want to apply on it.\n"
+                   "- Salt and pepper: Adds random noise the image.\n"
+                   "- Blur: Applies a blurring effect to the image.\n"
+                   "- Contour: Detects edges of objects in the image.\n"
+                   "- Rotate: Rotates the image in clockwise.\n"
+                   "- Segment: Divides the image into regions based on similarities.\n"
+                   "- Concat: Combines two images either horizontally or vertically.\n"
+                   "- Rotate num: Rotates the image in clockwise num times. \n"
+                   " - Done: to quit"
+                   )
+        if "text" in msg and msg["text"].lower() == '/start':
+            self.send_text(msg['chat']['id'], f"Hello {name}, Welcome to Ameer images bot.\n")
+            self.send_text(msg['chat']['id'], options)
+        elif 'text' in msg and msg['text'].lower() == 'done':
+            self.send_text(msg['chat']['id'], "Good bye, we well be happy to see you again")
+        else:
+            try:
+                is_image = self.is_current_msg_photo(msg)
+                if is_image:
+                    img = Img(self.download_user_photo(msg))
+                    filter_option = msg['caption'].strip().split(' ')
+                    if len(filter_option) == 1:
+                        self.send_text(msg['chat']['id'], f'{filter_option[0]}...')
+                        if filter_option == "blur":
+                            img.blur()
+                        elif filter_option == "rotate":
+                            img.rotate()
+                        elif filter_option == "contour":
+                            img.contour()
+                        elif filter_option == 'segment':
+                            img.segment()
+                        elif filter_option == 'concat':
+                            img2_path = self.download_user_photo(msg)
+                            img2 = Img(img2_path)
+                            img.concat(img2)
+                        else:
+                            self.send_text(msg['chat']['id'], "invalid filter")
+                            return
+
+                    elif len(filter_option) > 1:
+                        if filter_option[0] == "salt":
+                            self.send_text(msg['chat']['id'], f'{filter_option[0]} {filter_option[1]} ...')
+                            img.salt_n_pepper()
+                        elif filter_option[0] == "rotate":
+                            self.send_text(msg['chat']['id'], f'{filter_option[0]} image{filter_option[1]} times..')
+                            num = int(filter_option[1].strip())
+                            for i in range(num):
+                                img.rotate()
+                        else:
+                            self.send_text(msg['chat']['id'], "invalid filter")
+                            return
+
+                    else:
+                        self.send_text(msg['chat']['id'], "invalid filter")
+
+                        return
+                    new_img_path = img.save_img()
+                    self.send_photo(msg['chat']['id'], new_img_path)
+                else:
+                    self.send_text(msg['chat']['id'], options)
+            except Exception as e:
+                logger.error(f'Error: {e}')
+                self.send_text(msg['chat']['id'], 'something went wrong...\n'
+                                                  'please try again\n')

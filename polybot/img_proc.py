@@ -52,11 +52,14 @@ class Img:
             self.data[i] = res
 
     def rotate(self):
-        for i in range(len(self.data)):
-            for j in range(i):
-                tmp = self.data[i][j]
-                self.data[i][j] = self.data[j][i]
-                self.data[j][i] = tmp
+        if len(self.data) == len(self.data[0]):
+            for i in range(len(self.data)):
+                for j in range(i):
+                    tmp = self.data[i][j]
+                    self.data[i][j] = self.data[j][i]
+                    self.data[j][i] = tmp
+        else:
+            self.data = [list(row) for row in zip(*self.data[::-1])]
 
     def salt_n_pepper(self):
         for i in range(len(self.data)):
@@ -83,7 +86,7 @@ class Img:
     def segment(self):
         for i in range(len(self.data)):
             for j in range(len(self.data[i])):
-                if self.data[i][j]> 100:
+                if self.data[i][j] > 100:
                     self.data[i][j] = 255
                 else:
                     self.data[i][j] = 0

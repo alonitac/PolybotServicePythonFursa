@@ -1,122 +1,79 @@
-# Image Processing Bot
+# Image Processing Telegram Bot
 
-## Overview
+This Telegram bot allows users to process images with various filters and transformations.
 
-The Image Processing Bot is a Telegram bot designed to process images based on user-provided captions. Users can send photos with captions such as 'Blur', 'Rotate', 'Concat', etc., and the bot will apply the corresponding filter to the image and send it back. This README provides an overview of the setup, features, and usage instructions for the bot.
-
-## Features
-
-- **Greet Users**: Responds to messages with 'start', 'hello', or 'hi' with a greeting message.
-- **Image Processing**: Supports several image processing functions, including:
-  - Blur
-  - Contour
-  - Rotate
-  - Segment
-  - Salt and Pepper
-  - Concat (concatenates two images)
-
-## Installation
+## Getting Started
 
 ### Prerequisites
 
-- Python 3.6+
-- Telegram Bot Token (You can get this by talking to [BotFather](https://core.telegram.org/bots#botfather) on Telegram)
-- Flask
-- Loguru
-- Matplotlib
+- Python 3.x
+- [Flask](https://pypi.org/project/Flask/)
+- [matplotlib](https://pypi.org/project/matplotlib/)
+- [python-telegram-bot](https://pypi.org/project/python-telegram-bot/)
+- [loguru](https://pypi.org/project/loguru/)
 
-### Steps
+### Installation
 
-1. **Clone the repository:**
+1. Clone this repository:
 
-    ```bash
-    git clone https://github.com/your-repo/image-processing-bot.git
-    cd polybot
+    ```sh
+    git clone <repository_url>
+    cd <repository_directory>
     ```
 
-2. **Install dependencies:**
+2. Install the dependencies:
 
-    ```bash
+    ```sh
     pip install -r requirements.txt
     ```
 
-3. **Set environment variables:**
+### Usage
 
-    Set the following environment variables with your Telegram bot token and webhook URL.
+1. Set up environment variables:
+    - `TELEGRAM_TOKEN`: Your Telegram bot token.
+    - `TELEGRAM_APP_URL`: Your application URL.
 
-    ```bash
-    export TELEGRAM_TOKEN='your-telegram-bot-token'
-    export TELEGRAM_APP_URL='your-app-url'
-    ```
+2. Run the Flask app:
 
-4. **Run the bot:**
-
-    ```bash
+    ```sh
     python app.py
     ```
 
-## Usage
+   3. Start chatting with your Telegram bot! Send an image along with a caption specifying the filter or transformation you want to apply.
 
-### Starting the Bot
+       **Examples:**
+    
+       - Applying the blur filter:
+    
+           ![Blur Example](/path/to/blur_example.png)
+        
+       - Applying the contour filter:
+   
+         ![Segment Example](/home/abdallah/Pictures/Screenshots/segment.png)
 
-Send a message with 'start', 'hello', or 'hi' to the bot to receive a greeting message.
+        
 
-### Sending a Photo
+    <!-- Add more examples as needed -->
 
-Send a photo with one of the following captions to apply the corresponding filter:
+## File Structure
 
-- 'Blur'
-- 'Contour'
-- 'Rotate'
-- 'Segment'
-- 'Salt and Pepper'
-- 'Concat' (requires a second photo, specified in the message)
+- `app.py`: Flask application handling Telegram webhook and routing.
+- `img_proc.py`: Image processing utilities including filters and transformations.
+- `bot.py`: Base class and subclasses for different types of Telegram bots.
 
-### Example
+## Supported Filters/Transformations
 
-1. **Start the bot:**
+- Blur
+- Contour
+- Rotate
+- Salt and Pepper
+- Segment
+- Concatenation (horizontal/vertical)
 
-    ```
-    You: start
-    Bot: Hi there! I'm your Image Processing Bot. Send me a photo with a caption like 'Blur', 'Rotate', 'Concat', etc., and I'll apply the filter for you!
-    ```
+## Contributing
 
-2. **Send a photo with a caption:**
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
-    ```
-    You: (Send a photo with the caption 'Blur')
-    Bot: (Sends back the blurred photo)
-    ```
+## License
 
-## Code Explanation
-
-### `Bot` Class
-
-- **`__init__`**: Initializes the bot, sets up the webhook.
-- **`send_text`**: Sends a text message to a chat.
-- **`send_text_with_quote`**: Sends a text message with a quoted message.
-- **`is_current_msg_photo`**: Checks if the current message contains a photo.
-- **`download_user_photo`**: Downloads the photo sent by the user.
-- **`send_photo`**: Sends a photo to a chat.
-- **`handle_message`**: Handles incoming messages.
-
-### `QuoteBot` Class
-
-Inherits from `Bot`, handles messages by quoting them.
-
-### `ImageProcessingBot` Class
-
-Inherits from `Bot`, processes images based on captions.
-
-- **`process_image`**: Applies filters to the image based on the caption.
-
-### `Img` Class
-
-Handles image processing operations.
-
-- **`blur`**: Applies a blur filter.
-- **`contour`**: Applies a contour filter.
-- **`rotate`**: Rotates the image.
-- **`segment`**: Segments the image.
-- **`salt_n_pepper`**: Applies a salt and pepper noise filter.
-- **`concat`**: Concatenates two images.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

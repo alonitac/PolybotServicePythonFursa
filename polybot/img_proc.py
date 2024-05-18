@@ -76,14 +76,13 @@ class Img:
                     self.data[i][j] = 0  # Pepper
 
     def concat(self, other_img, direction='horizontal'):
-        if len(self.data[0]) != len(other_img.data[0]):
-            raise RuntimeError("Images have different widths and cannot be concatenated vertically.")
-
         if direction == 'horizontal':
             if len(self.data) != len(other_img.data):
                 raise RuntimeError("Images have different heights and cannot be concatenated horizontally.")
             self.data = [self_row + other_row for self_row, other_row in zip(self.data, other_img.data)]
         elif direction == 'vertical':
+            if len(self.data[0]) != len(other_img.data[0]):
+                raise RuntimeError("Images have different widths and cannot be concatenated vertically.")
             self.data += other_img.data
         else:
             raise ValueError("Invalid direction. Direction must be 'horizontal' or 'vertical'.")
@@ -95,3 +94,9 @@ class Img:
                     self.data[i][j] = 255  # White
                 else:
                     self.data[i][j] = 0  # Black
+
+
+my_img = Img('/home/abdallah/Pictures/Screenshots/img1.png')
+another_img = Img('/home/abdallah/Pictures/Screenshots/img2.png')
+my_img.concat(another_img , 'horizontal')
+my_img.save_img()   # concatenated image was saved in 'path/to/image_filtered.jpg'

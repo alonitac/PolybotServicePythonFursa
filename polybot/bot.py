@@ -148,6 +148,7 @@ class ImageProcessingBot(Bot):
             else:
                 raise ValueError("Second image path is required for concatenation.")
         else:
+
             raise ValueError(
                 f"Invalid caption: {caption}. Supported captions are: ['blur', 'contour', 'rotate', 'segment', "
                 f"'salt and pepper', 'concat horizontal', 'concat vertical']"

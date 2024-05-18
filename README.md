@@ -42,14 +42,21 @@ This Telegram bot allows users to process images with various filters and transf
    3. Start chatting with your Telegram bot! Send an image along with a caption specifying the filter or transformation you want to apply.
 
        **Examples:**
+       - Applying /start command:
+
+           ![Screenshot from 2024-05-18 10-42-58](https://github.com/abd129-0/PolybotServicePythonFursa/assets/75143506/f962be9b-a4e0-4bef-9d10-e6b26e21b613)
+
     
        - Applying the blur filter:
     
-           ![Blur Example](/path/to/blur_example.png)
+           ![Screenshot from 2024-05-18 10-44-55](https://github.com/abd129-0/PolybotServicePythonFursa/assets/75143506/9a371d3b-bda0-4b81-88d0-4b34fd7e1a8c)
+
         
-       - Applying the contour filter:
-   
-         ![Segment Example](/home/abdallah/Pictures/Screenshots/segment.png)
+       - Applying the segment filter:
+    
+           ![segment](https://github.com/abd129-0/PolybotServicePythonFursa/assets/75143506/3d2d5926-fd97-4692-8e3c-1477cde065e7)
+
+         
 
         
 

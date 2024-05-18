@@ -88,14 +88,15 @@ class ImageProcessingBot(Bot):
                    "- Rotate num: Rotates the image in clockwise num times. \n"
                    " - Done: to quit"
                    )
-        chat_id = msg['chat']['id']
-        if "text" in msg and msg["text"].lower() == '/start':
-            self.send_text(chat_id, f"Hello {name}, Welcome to Ameer images bot.\n")
-            self.send_text(chat_id, options)
-        elif 'text' in msg and msg['text'].lower() == 'done':
-            self.send_text(chat_id, "Good bye, we well be happy to see you again")
-        else:
-            try:
+        try:
+
+            chat_id = msg['chat']['id']
+            if "text" in msg and msg["text"].lower() == '/start':
+                self.send_text(chat_id, f"Hello {name}, Welcome to Ameer images bot.\n")
+                self.send_text(chat_id, options)
+            elif 'text' in msg and msg['text'].lower() == 'done':
+                self.send_text(chat_id, "Good bye, we well be happy to see you again")
+            else:
                 is_image = self.is_current_msg_photo(msg)
                 if is_image:
                     img = Img(self.download_user_photo(msg))
@@ -115,7 +116,7 @@ class ImageProcessingBot(Bot):
                             img2 = Img(img2_path)
                             img.concat(img2)
                         else:
-                            self.send_text(chat_id, "invalid filter")
+                            self.send_text(chat_id, "Invalid filter")
                             return
 
                     elif len(filter_option) > 1:
@@ -124,20 +125,25 @@ class ImageProcessingBot(Bot):
                             img.salt_n_pepper()
                         elif filter_option[0].lower() == "rotate":
                             self.send_text(chat_id, f'{filter_option[0]} image{filter_option[1]} times..')
-                            num = int(filter_option[1].strip())
-                            for i in range(num):
-                                img.rotate()
+                            try:
+                                num = int(filter_option[1].strip())
+                                for i in range(num):
+                                    img.rotate()
+                            except:
+                                self.send_text(chat_id, "Invalid filter")
+                                return
                         else:
-                            self.send_text(chat_id, "invalid filter")
+                            self.send_text(chat_id, "Invalid filter")
                             return
 
                     else:
                         self.send_text(chat_id, "invalid filter")
                         return
-                    new_img_path = img.save_img()
-                    self.send_photo(chat_id, new_img_path)
+                    new_path = img.save_img()
+                    self.send_photo(chat_id, new_path)
                 else:
                     self.send_text(chat_id, options)
-            except Exception as e:
-                logger.error(f'Error: {e}')
-                self.send_text(msg['chat']['id'], 'something went wrong, try again...\n')
+
+        except Exception as e:
+            logger.error(f'Error: {e}')
+            self.send_text(msg['chat']['id'], 'Something went Wrong, Try Again...\n')

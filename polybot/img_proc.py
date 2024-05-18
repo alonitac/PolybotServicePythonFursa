@@ -52,8 +52,11 @@ class Img:
             self.data[i] = res
 
     def rotate(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for i in range(len(self.data)):
+            for j in range(i):
+                tmp = self.data[i][j]
+                self.data[i][j] = self.data[j][i]
+                self.data[j][i] = tmp
 
     def salt_n_pepper(self):
         for i in range(len(self.data)):
@@ -63,10 +66,6 @@ class Img:
                     self.data[i][j] = 255
                 elif rnd > 0.8:
                     self.data[i][j] = 0
-        my_img = Img('/home/ameer123/PycharmProjects/PolybotServicePythonFursa/polybot/test/beatles.jpeg')
-        my_img.salt_n_pepper()
-        my_img.save_img()  # noisy image was saved in 'path/to/image_filtered.jpg'
-
 
     def concat(self, other_img, direction='horizontal'):
         # TODO remove the `raise` below, and write your implementation

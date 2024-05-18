@@ -63,11 +63,10 @@ class Img:
                     self.data[i][j] = 255
                 elif rnd > 0.8:
                     self.data[i][j] = 0
+        my_img = Img('/home/ameer123/PycharmProjects/PolybotServicePythonFursa/polybot/test/beatles.jpeg')
+        my_img.salt_n_pepper()
+        my_img.save_img()  # noisy image was saved in 'path/to/image_filtered.jpg'
 
-
-
-        # TODO remove the `raise` below, and write your implementation
-        # raise NotImplementedError()
 
     def concat(self, other_img, direction='horizontal'):
         # TODO remove the `raise` below, and write your implementation
@@ -75,5 +74,10 @@ class Img:
         raise NotImplementedError()
 
     def segment(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for i in range(len(self.data)):
+            for j in range(len(self.data[i])):
+                if self.data[i][j]> 100:
+                    self.data[i][j] = 255
+                else:
+                    self.data[i][j] = 0
+

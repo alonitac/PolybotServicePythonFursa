@@ -101,15 +101,15 @@ class ImageProcessingBot(Bot):
                     filter_option = msg['caption'].strip().split(' ')
                     if len(filter_option) == 1:
                         self.send_text(msg['chat']['id'], f'{filter_option[0]}...')
-                        if filter_option == "blur":
+                        if filter_option[0] == "blur":
                             img.blur()
-                        elif filter_option == "rotate":
+                        elif filter_option[0] == "rotate":
                             img.rotate()
-                        elif filter_option == "contour":
+                        elif filter_option[0] == "contour":
                             img.contour()
-                        elif filter_option == 'segment':
+                        elif filter_option[0] == 'segment':
                             img.segment()
-                        elif filter_option == 'concat':
+                        elif filter_option[0] == 'concat':
                             img2_path = self.download_user_photo(msg)
                             img2 = Img(img2_path)
                             img.concat(img2)

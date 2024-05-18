@@ -1,3 +1,4 @@
+import random
 from pathlib import Path
 from matplotlib.image import imread, imsave
 
@@ -55,11 +56,22 @@ class Img:
         raise NotImplementedError()
 
     def salt_n_pepper(self):
+        for i in range(len(self.data)):
+            for j in range(len(self.data[i])):
+                rnd = random.random()
+                if rnd < 0.2:
+                    self.data[i][j] = 255
+                elif rnd > 0.8:
+                    self.data[i][j] = 0
+
+
+
         # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        # raise NotImplementedError()
 
     def concat(self, other_img, direction='horizontal'):
         # TODO remove the `raise` below, and write your implementation
+
         raise NotImplementedError()
 
     def segment(self):

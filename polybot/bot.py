@@ -124,7 +124,7 @@ class ImageProcessingBot(Bot):
                             self.send_text(chat_id, f'{filter_option[0]} {filter_option[1]} ...')
                             img.salt_n_pepper()
                         elif filter_option[0].lower() == "rotate":
-                            self.send_text(chat_id, f'{filter_option[0]} image{filter_option[1]} times..')
+                            self.send_text(chat_id, f'{filter_option[0]} image {filter_option[1]} times..')
                             try:
                                 num = int(filter_option[1].strip())
                                 for i in range(num):

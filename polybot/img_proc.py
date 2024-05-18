@@ -68,9 +68,17 @@ class Img:
                     self.data[i][j] = 0
 
     def concat(self, other_img, direction='horizontal'):
-        # TODO remove the `raise` below, and write your implementation
+        if len(self.data) != len(other_img.data) or len(self.data[0]) != len(other_img.data[0]):
+            raise RuntimeError("ERROR: images dimensions are not compatible")
+        if direction == 'horizontal':
+            for i in range(len(other_img.data)):
+                self.data[i] += other_img.data[i]
+        elif direction == 'vertical':
+            for i in range(len(other_img.data)):
+                self.data.append(other_img.data[i])
+        else:
+            raise RuntimeError("ERROR: invalid direction")
 
-        raise NotImplementedError()
 
     def segment(self):
         for i in range(len(self.data)):

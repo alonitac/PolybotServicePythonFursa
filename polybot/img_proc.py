@@ -94,9 +94,3 @@ class Img:
                     self.data[i][j] = 255  # White
                 else:
                     self.data[i][j] = 0  # Black
-
-
-my_img = Img('/home/abdallah/Pictures/Screenshots/img1.png')
-another_img = Img('/home/abdallah/Pictures/Screenshots/img2.png')
-my_img.concat(another_img , 'horizontal')
-my_img.save_img()   # concatenated image was saved in 'path/to/image_filtered.jpg'

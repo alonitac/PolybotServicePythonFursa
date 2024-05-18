@@ -101,15 +101,15 @@ class ImageProcessingBot(Bot):
                     filter_option = msg['caption'].strip().split(' ')
                     if len(filter_option) == 1:
                         self.send_text(msg['chat']['id'], f'{filter_option[0]}...')
-                        if filter_option[0] == "blur":
+                        if filter_option[0].lower() == "blur":
                             img.blur()
-                        elif filter_option[0] == "rotate":
+                        elif filter_option[0].lower() == "rotate":
                             img.rotate()
-                        elif filter_option[0] == "contour":
+                        elif filter_option[0].lower() == "contour":
                             img.contour()
-                        elif filter_option[0] == 'segment':
+                        elif filter_option[0].lower() == 'segment':
                             img.segment()
-                        elif filter_option[0] == 'concat':
+                        elif filter_option[0].lower() == 'concat':
                             img2_path = self.download_user_photo(msg)
                             img2 = Img(img2_path)
                             img.concat(img2)
@@ -118,10 +118,10 @@ class ImageProcessingBot(Bot):
                             return
 
                     elif len(filter_option) > 1:
-                        if filter_option[0] == "salt":
+                        if filter_option[0].lower() == "salt":
                             self.send_text(msg['chat']['id'], f'{filter_option[0]} {filter_option[1]} ...')
                             img.salt_n_pepper()
-                        elif filter_option[0] == "rotate":
+                        elif filter_option[0].lower() == "rotate":
                             self.send_text(msg['chat']['id'], f'{filter_option[0]} image{filter_option[1]} times..')
                             num = int(filter_option[1].strip())
                             for i in range(num):

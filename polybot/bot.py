@@ -97,21 +97,20 @@ class ImageProcessingBot(Bot):
                     self.send_text(msg['chat']['id'], 'processing the image...')
                     img_path = self.download_user_photo(msg)
                     img = Img(img_path)
-                    process_option = msg['caption'].strip().split(' ')
-                    option = process_option[0].lower().strip()
-                    if option == 'blur':
+                    process_option = msg['caption'].strip().lower()
+                    if process_option == 'blur':
                         img.blur()
-                    elif option == 'contour':
+                    elif process_option == 'contour':
                         img.contour()
-                    elif option == 'rotate':
-                        num_of_rotations = int(process_option[1])
+                    elif 'rotate' in process_option:
+                        num_of_rotations = int(process_option.split(' ')[1])
                         for _ in range(num_of_rotations):
                             img.rotate()
-                    elif option == 'salt and pepper':
+                    elif process_option == 'salt and pepper':
                         img.salt_n_pepper()
-                    elif option == 'segment':
+                    elif process_option == 'segment':
                         img.segment()
-                    elif option == 'concat':
+                    elif process_option == 'concat':
                         img2_path = self.download_user_photo(msg)
                         img2 = Img(img2_path)
                         img.concat(img2)

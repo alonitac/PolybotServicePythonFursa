@@ -90,7 +90,7 @@ In the next step you'll finally run your bot app.
 2. Run the Flask app:
 
     ```sh
-    python app.py
+    python polybot/app.py
     ```
 
    3. Start chatting with your Telegram bot! Send an image along with a caption specifying the filter or transformation you want to apply.

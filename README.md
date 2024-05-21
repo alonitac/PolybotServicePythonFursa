@@ -29,6 +29,7 @@ Let's get started...
 Reference: https://ai.stanford.edu/~syyeung/cvweb/tutorial1.html
 
 ### What is a digital image?
+##sadsa
 
 
 If we take a closer look on a digital image, we will notice it comprised of individual pixels, 

@@ -24,6 +24,5 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > mykey.pem
           chmod 400 mykey.pem
           
-          
           ssh -i mykey.pem -o StrictHostKeyChecking=accept-new ubuntu@$EC2_PUBLIC_IP " bash ~/deploy.sh &"
           # TODO your deployment script here...

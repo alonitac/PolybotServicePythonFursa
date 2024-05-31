@@ -18,7 +18,9 @@ class Bot:
         time.sleep(0.5)
 
         # set the webhook URL
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60, certificate=open('dev-cert.pem', 'r'))
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/'
+                                                 f'{token}/', timeout=60,
+                                             certificate=open("cert.pem", "r"))
 
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 

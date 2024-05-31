@@ -3,6 +3,9 @@ polybot/photos
 polybot/test/
 photos
 
+polybot/cert.pem
+polybot/private.key
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

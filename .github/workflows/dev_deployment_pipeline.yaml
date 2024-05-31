@@ -25,10 +25,11 @@ jobs:
           chmod 400 mykey.pem
           
           
-          ssh -i mykey.pem -o StrictHostKeyChecking=accept-new ubuntu@$EC2_PUBLIC_IP "cd PolybotServicePythonFursa/polybot/
-  source venv/bin/activate
-  pip install -r requirements.txt
-  export TELEGRAM_TOKEN=$TOKEN
-  export TELEGRAM_APP_URL=dev-bot.mohmmad.click:8443
-  python3 app.py &"
+          ssh -i mykey.pem -o StrictHostKeyChecking=accept-new ubuntu@$EC2_PUBLIC_IP "
+          cd PolybotServicePythonFursa/polybot/
+          source venv/bin/activate
+          pip install -r requirements.txt
+          export TELEGRAM_TOKEN=$TOKEN
+          export TELEGRAM_APP_URL=dev-bot.mohmmad.click:8443
+          python3 app.py &"
           # TODO your deployment script here...

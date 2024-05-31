@@ -87,9 +87,10 @@ class ImageProcessingBot(Bot):
                         'filter you want to apply on it.\n'
                         f'{choices_msg}')
         if "text" in msg and msg["text"] == '/start':
-            self.send_text(msg['chat']['id'],
-                           'Hello! I am your bot. How can I assist you today?')
-            self.send_text(msg['chat']['id'], usage_msg)
+            self.send_text(msg['chat']['id'], 'Hey dont start me!!!')
+#            self.send_text(msg['chat']['id'],
+#                           'Hello! I am your bot. How can I assist you today?')
+#            self.send_text(msg['chat']['id'], usage_msg)
         else:
             is_photo = self.is_current_msg_photo(msg)
             try:

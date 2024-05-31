@@ -9,7 +9,7 @@ on:
 env:
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # TODO define this secret in your GitHub repo settings
   TOKEN: ${{ secrets.DEV_TELGRAM_TOKEN }}
-  EC2_PUBLIC_IP: 13.60.87.106
+  EC2_PUBLIC_IP: 16.171.199.176
 
 
 jobs:

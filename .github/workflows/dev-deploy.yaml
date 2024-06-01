@@ -24,8 +24,5 @@ jobs:
       run: |
           echo "$SSH_PRIVATE_KEY" > mykey.pem
           chmod 400 mykey.pem
-          ssh -o StrictHostKeyChecking=no -i mykey.pem ubuntu@$EC2_PUBLIC_IP
-          cd /home/ubuntu/PolybotServicePythonFursa
-          git pull origin dev
-          sudo systemctl restart mybot.service
-        EOF
+          ssh -o StrictHostKeyChecking=no -i mykey.pem ubuntu@$EC2_PUBLIC_IP "bash ~/dev_deploy.sh &"
+          

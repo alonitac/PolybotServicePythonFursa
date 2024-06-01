@@ -7,7 +7,7 @@ on:
       - dev
 
 env:
-  EC2_PUBLIC_IP: 3.83.192.56
+  EC2_PUBLIC_IP: 44.192.53.139
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   TELEGRAM_APP_URL: dev-bot.mohammadgh.click:8443
   TELEGRAM_TOKEN: ${{ secrets.DEV_TELEGRAM_TOKEN }}

@@ -7,10 +7,8 @@ on:
       - dev
 
 env:
-  EC2_PUBLIC_IP: 3.83.192.56
+  EC2_PUBLIC_IP: 3.236.230.48
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-  TELEGRAM_APP_URL: dev-bot.mohammadgh.click:8443
-  TELEGRAM_TOKEN: ${{ secrets.DEV_TELEGRAM_TOKEN }}
 
 jobs:
   Deploy:
@@ -23,6 +21,6 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > mykey.pem
           chmod 400 mykey.pem
-          
+
           # connect to ec2 using ssh
-          ssh -o StrictHostKeyChecking=accept-new -i mykey.pem ubuntu@$EC2_PUBLIC_IP "cd PolybotServicePythonFursa && git pull origin dev && sudo systemctl restart telegram_bot_dev.service"
+          ssh -o StrictHostKeyChecking=accept-new -i mykey.pem ubuntu@$EC2_PUBLIC_IP "sudo systemctl daemon-reload && sudo systemctl restart telegram_bot_dev.service && sudo systemctl enable telegram_bot_dev.service"

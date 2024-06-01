@@ -96,7 +96,7 @@ class ImageProcessingBot(Bot):
             elif msg["text"] == 'Hi':
                 self.send_text(msg['chat']['id'], 'Hi there, how can i help you today?')
             else:
-                self.send_text(msg['chat']['id'], f'Hey, Don\'t {msg["text"]} me!')
+                self.send_text(msg['chat']['id'], f'Hey, Don\'t {msg["text"]} me!!')
         else:
             is_photo = self.is_current_msg_photo(msg)
             try:

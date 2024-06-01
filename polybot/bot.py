@@ -88,10 +88,15 @@ class ImageProcessingBot(Bot):
         usage_msg = ('Please send a photo, with a caption of the '
                         'filter you want to apply on it.\n'
                         f'{choices_msg}')
-        if "text" in msg and msg["text"] == '/start':
-            self.send_text(msg['chat']['id'],
-                           'Hello! I am your bot. How can I assist you today?')
-            self.send_text(msg['chat']['id'], usage_msg)
+        if "text" in msg:
+            if msg["text"] == '/start':
+                self.send_text(msg['chat']['id'],
+                               'Hello! I am your bot. How can I help you today?')
+                self.send_text(msg['chat']['id'], usage_msg)
+            elif msg["text"] == 'Hi':
+                self.send_text(msg['chat']['id'], 'Hi there, how can i help you today?')
+            else:
+                self.send_text(msg['chat']['id'], f'Hey, Don\'t {msg["text"]} me!!')
         else:
             is_photo = self.is_current_msg_photo(msg)
             try:

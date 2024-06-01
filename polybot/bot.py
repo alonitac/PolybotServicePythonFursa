@@ -1,9 +1,10 @@
 import telebot
 from loguru import logger
 import os
+import sys
 import time
 from telebot.types import InputFile
-from polybot.img_proc import Img
+from img_proc import Img
 
 
 class Bot:

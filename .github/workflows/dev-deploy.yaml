@@ -1,4 +1,4 @@
-name: dev Polybot Service Deployment
+name: Dev Polybot Service Deployment
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
 
 env:
   EC2_PUBLIC_IP: 13.60.97.131
+  TOKEN: ${{ secrets.DEV_TELGRAM_TOKEN}}
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   DOMAIN: dev-bot.abdullahfursa.click:8443
 
@@ -21,10 +22,10 @@ jobs:
 
     - name: SSH to EC2 instance
       run: |
-        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ubuntu@$INSTANCE_IP << 'EOF'
-          cd /home/ubuntu/PolybotServicePythonFursa/polybot
+          echo "$SSH_PRIVATE_KEY" > mykey.pem
+          chmod 400 mykey.pem
+          ssh -o StrictHostKeyChecking=no -i mykey.pem ubuntu@$EC2_PUBLIC_IP
+          cd /home/ubuntu/PolybotServicePythonFursa
           git pull origin dev
-          source /home/ubuntu/PolybotServicePythonFursa/polybot/venv/bin/activate
-          pip install -r requirements.txt
           sudo systemctl restart mybot.service
         EOF

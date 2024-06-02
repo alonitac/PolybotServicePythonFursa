@@ -1,6 +1,7 @@
 import telebot
 from loguru import logger
 import os
+import sys
 import time
 from telebot.types import InputFile
 from img_proc import Img

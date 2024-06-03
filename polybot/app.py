@@ -23,6 +23,6 @@ def webhook():
 
 if __name__ == "__main__":
 
-    bot = ImageProcessingBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)  # Instantiate QuoteBot
+    bot = ImageProcessingBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)  # Instantiate QuoteBot1
 
     app.run(host='0.0.0.0', port=8443, ssl_context=('YOURPUBLIC.pem', 'YOURPRIVATE.key'))

@@ -6,7 +6,7 @@ on:
       - dev
 
 env:
-  EC2_PUBLIC_IP: 13.60.97.131
+  EC2_PUBLIC_IP: 16.171.129.40
   TOKEN: ${{ secrets.DEV_TELGRAM_TOKEN}}
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   DOMAIN: dev-bot.abdullahfursa.click:8443
@@ -24,8 +24,5 @@ jobs:
       run: |
           echo "$SSH_PRIVATE_KEY" > mykey.pem
           chmod 400 mykey.pem
-          ssh -o StrictHostKeyChecking=no -i mykey.pem ubuntu@$EC2_PUBLIC_IP
-          cd /home/ubuntu/PolybotServicePythonFursa
-          git pull origin dev
-          sudo systemctl restart mybot.service
-        EOF
+          ssh -o StrictHostKeyChecking=no -i mykey.pem ubuntu@$EC2_PUBLIC_IP "bash ~/dev_deploy.sh &"
+          

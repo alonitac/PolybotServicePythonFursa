@@ -98,7 +98,7 @@ class ImageProcessingBot(Bot):
                 self.send_text(msg['chat']['id'],
                                'Hello! I am your Image Processing Bot. How can I assist you today?')
 	    if "text" in msg and msg["text"].strip().lower() == 'start':
-                 self.send_text(msg['chat']['id'],
+                self.send_text(msg['chat']['id'],
                                'NotValidMSG!!')
 
                 self.send_text(msg['chat']['id'], usage_msg)

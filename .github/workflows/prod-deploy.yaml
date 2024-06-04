@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  EC2_PUBLIC_IP: 16.170.202.142
+  EC2_PUBLIC_IP: 16.170.218.102
   TOKEN: ${{ secrets.PROD_TELGRAM_TOKEN}}
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   DOMAIN: prod-bot.abdullahfursa.click:8443

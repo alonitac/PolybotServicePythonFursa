@@ -94,6 +94,8 @@ class ImageProcessingBot(Bot):
                          'Supported filters:\n'
                          f'{choices_msg}')
 
+            if "text" in msg and msg["text"].strip().lower() == 'bye':
+                self.send_text(msg['chat']['id'], 'see you soon')
             if "text" in msg and msg["text"].strip().lower() == '/start':
                 self.send_text(msg['chat']['id'], 'Hello! I am your Image Processing Bot. How can I assist you today?')
             if "text" in msg and msg["text"].strip().lower() == 'hi':

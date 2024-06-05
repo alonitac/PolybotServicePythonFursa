@@ -6,7 +6,7 @@ on:
       - dev
 
 env:
-  EC2_PUBLIC_IP: 13.51.158.13
+  EC2_PUBLIC_IP: 13.60.32.138
   TOKEN: ${{ secrets.DEV_TELGRAM_TOKEN}}
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   DOMAIN: dev-bot.abdullahfursa.click:8443

@@ -1,3 +1,4 @@
+import random
 from pathlib import Path
 from matplotlib.image import imread, imsave
 
@@ -51,17 +52,45 @@ class Img:
             self.data[i] = res
 
     def rotate(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        height = len(self.data)
+        width = len(self.data[0])
+
+        # Transpose the image (swap rows with columns)
+        transposed_data = [[self.data[j][i] for j in range(height)] for i in range(width)]
+
+        # Reverse the rows to complete the rotation
+        for i in range(width):
+            transposed_data[i] = transposed_data[i][::-1]
+
+        # Update the image data with the rotated data
+        self.data = transposed_data
+
 
     def salt_n_pepper(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for i in range(len(self.data)):
+            for j in range(len(self.data[0])):
+                rand = random.random()
+                if rand < 0.2:
+                    self.data[i][j] = 255  # Salt
+                elif rand > 0.8:
+                    self.data[i][j] = 0  # Pepper
 
     def concat(self, other_img, direction='horizontal'):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        if direction == 'horizontal':
+            if len(self.data) != len(other_img.data):
+                raise RuntimeError("Images have different heights and cannot be concatenated horizontally.")
+            self.data = [self_row + other_row for self_row, other_row in zip(self.data, other_img.data)]
+        elif direction == 'vertical':
+            if len(self.data[0]) != len(other_img.data[0]):
+                raise RuntimeError("Images have different widths and cannot be concatenated vertically.")
+            self.data += other_img.data
+        else:
+            raise ValueError("Invalid direction. Direction must be 'horizontal' or 'vertical'.")
 
     def segment(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for i in range(len(self.data)):
+            for j in range(len(self.data[0])):
+                if self.data[i][j] > 100:
+                    self.data[i][j] = 255  # White
+                else:
+                    self.data[i][j] = 0  # Black

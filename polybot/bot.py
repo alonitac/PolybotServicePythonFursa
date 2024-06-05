@@ -3,7 +3,7 @@ from loguru import logger
 import os
 import time
 from telebot.types import InputFile
-from polybot.img_proc import Img
+from img_proc import Img
 
 
 class Bot:
@@ -18,7 +18,7 @@ class Bot:
         time.sleep(0.5)
 
         # set the webhook URL
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60, certificate=open('YOURPUBLIC.pem', 'r'))
 
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
@@ -75,4 +75,88 @@ class QuoteBot(Bot):
 
 
 class ImageProcessingBot(Bot):
-    pass
+    def __init__(self, token, telegram_chat_url):
+        super().__init__(token, telegram_chat_url)
+        self.pending_images = {}
+
+    def handle_message(self, msg):
+        try:
+            logger.info(f'Incoming message: {msg}')
+
+            choices_msg = ('- Blur\n'
+                           '- Contour\n'
+                           '- Rotate\n'
+                           '- Salt and pepper\n'
+                           '- Segment\n'
+                           '- Concat [horizontal/vertical]')
+            usage_msg = ('Welcome to the Image Processing Bot!\n'
+                         'Please send a photo along with a caption specifying the filter you want to apply.\n'
+                         'Supported filters:\n'
+                         f'{choices_msg}')
+
+            if "text" in msg and msg["text"].strip().lower() == 'bye':
+                self.send_text(msg['chat']['id'], 'see you soon')
+            if "text" in msg and msg["text"].strip().lower() == '/start':
+                self.send_text(msg['chat']['id'], 'Hello! I am your Image Processing Bot. How can I assist you today?')
+            if "text" in msg and msg["text"].strip().lower() == 'hi':
+                self.send_text(msg['chat']['id'], 'Hello BOTTT!!!')
+
+                self.send_text(msg['chat']['id'], usage_msg)
+                return
+
+            is_photo = self.is_current_msg_photo(msg)
+
+            if is_photo:
+                self.send_text(msg['chat']['id'], 'Processing the image...')
+                photo_path = self.download_user_photo(msg)
+                caption = msg.get('caption', '').lower()
+
+                if caption.startswith('concat'):
+                    if msg['chat']['id'] not in self.pending_images:
+                        self.pending_images[msg['chat']['id']] = {'first_image': photo_path}
+                        self.send_text(msg['chat']['id'], 'Please send the second image for concatenation.')
+                    else:
+                        self.pending_images[msg['chat']['id']]['second_image'] = photo_path
+                        concat_direction = 'horizontal' if 'horizontal' in caption else 'vertical'
+                        processed_path = self.process_image(self.pending_images[msg['chat']['id']]['first_image'],
+                                                            caption, concat_direction,
+                                                            self.pending_images[msg['chat']['id']]['second_image'])
+                        self.send_photo(msg['chat']['id'], processed_path)
+                        del self.pending_images[msg['chat']['id']]
+                else:
+                    processed_path = self.process_image(photo_path, caption)
+                    self.send_photo(msg['chat']['id'], processed_path)
+            else:
+                self.send_text(msg['chat']['id'], "Please send a photo.")
+        except Exception as e:
+            logger.error(f"Error: {e}")
+            self.send_text(msg['chat']['id'], "Error: Please try again later.")
+
+    def process_image(self, photo_path, caption, concat_direction=None, second_photo_path=None):
+        img = Img(photo_path)
+
+        if caption == 'blur':
+            img.blur()
+        elif caption == 'contour':
+            img.contour()
+        elif caption == 'rotate':
+            img.rotate()
+        elif caption == 'segment':
+            img.segment()
+        elif caption == 'salt and pepper':
+            img.salt_n_pepper()
+        elif caption.startswith('concat'):
+            if second_photo_path:
+                second_img = Img(second_photo_path)
+                img.concat(second_img, direction=concat_direction)
+            else:
+                raise ValueError("Second image path is required for concatenation.")
+        else:
+
+            raise ValueError(
+                f"Invalid caption: {caption}. Supported captions are: ['blur', 'contour', 'rotate', 'segment', "
+                f"'salt and pepper', 'concat horizontal', 'concat vertical']"
+            )
+
+        processed_path = img.save_img()
+        return processed_path

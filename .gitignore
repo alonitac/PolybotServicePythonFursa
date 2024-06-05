@@ -17,6 +17,8 @@ eggs/
 lib/
 lib64/
 parts/
+YOURPUBLIC.pem
+YOURPRIVATE.key
 sdist/
 var/
 wheels/

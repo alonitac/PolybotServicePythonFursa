@@ -14,6 +14,8 @@ def index():
     return 'Ok'
 
 
+
+
 @app.route(f'/{TELEGRAM_TOKEN}/', methods=['POST'])
 def webhook():
     req = request.get_json()
@@ -22,6 +24,6 @@ def webhook():
 
 
 if __name__ == "__main__":
-    bot = Bot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
+    bot = ImageProcessingBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
 
-    app.run(host='0.0.0.0', port=8443)
+    app.run(host='0.0.0.0', port=8443, ssl_context=('YOURPUBLIC.pem', 'YOURPRIVATE.key'))

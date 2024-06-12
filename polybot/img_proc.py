@@ -1,3 +1,4 @@
+import random
 from pathlib import Path
 from matplotlib.image import imread, imsave
 
@@ -51,17 +52,42 @@ class Img:
             self.data[i] = res
 
     def rotate(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        if len(self.data) == len(self.data[0]):
+            for i in range(len(self.data)):
+                for j in range(i):
+                    tmp = self.data[i][j]
+                    self.data[i][j] = self.data[j][i]
+                    self.data[j][i] = tmp
+        else:
+            self.data = [list(row) for row in zip(*self.data[::-1])]
 
     def salt_n_pepper(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for i in range(len(self.data)):
+            for j in range(len(self.data[i])):
+                rnd = random.random()
+                if rnd < 0.2:
+                    self.data[i][j] = 255
+                elif rnd > 0.8:
+                    self.data[i][j] = 0
 
     def concat(self, other_img, direction='horizontal'):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        if len(self.data) != len(other_img.data) or len(self.data[0]) != len(other_img.data[0]):
+            raise RuntimeError("ERROR: images dimensions are not compatible")
+        if direction == 'horizontal':
+            for i in range(len(other_img.data)):
+                self.data[i] += other_img.data[i]
+        elif direction == 'vertical':
+            for i in range(len(other_img.data)):
+                self.data.append(other_img.data[i])
+        else:
+            raise RuntimeError("ERROR: invalid direction")
+
 
     def segment(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for i in range(len(self.data)):
+            for j in range(len(self.data[i])):
+                if self.data[i][j] > 100:
+                    self.data[i][j] = 255
+                else:
+                    self.data[i][j] = 0
+

@@ -7,7 +7,7 @@ on:
       - dev
 
 env:
-  EC2_PUBLIC_IP: 34.237.139.140
+  EC2_PUBLIC_IP: 3.235.247.204
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
 jobs:

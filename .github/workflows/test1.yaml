@@ -1,0 +1,21 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+
+permissions: {}
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.build_img.outputs.img_name }}
+    steps:
+      - id: build_img
+        run: echo "img_name=hello" >> "$GITHUB_OUTPUT"
+  Deploy:
+      needs: Build
+      uses: ./.github/workflows/deploy-dev.yaml
+      with:
+        image: ${ steps.Build.outputs.image }

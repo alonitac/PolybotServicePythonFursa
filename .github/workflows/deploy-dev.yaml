@@ -1,0 +1,17 @@
+name: Polybot Deploy Dev
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        required: true
+        type: string
+
+jobs:
+    Deploy:
+       runs-on: ubuntu-latest
+       steps:
+        - uses: actions/checkout@v4
+        - name: Deploy Docker image
+          run: |
+            echo ${{ inputs.image }}
